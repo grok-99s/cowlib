@@ -621,7 +621,7 @@ linger_push_promise_decode(HeaderData, PromisedStreamID, State0) ->
 	case linger_headers_decode(HeaderData, State0) of
 		{ok, State} when PromisedStreamID rem 2 =:= 0 ->
 			{error, {stream_error, PromisedStreamID, cancel,
-				'PUSH_PROMISE received for a stream that was reset. (RFC7540 6.6)'},
+				'PUSH_PROMISE received on a stream that was reset. (RFC7540 6.6)'},
 				stream_linger(PromisedStreamID,
 					advance_remote_streamid(State, PromisedStreamID))};
 		%% RFC7540 5.1.1, 6.6. A promised id must be a new server stream.
