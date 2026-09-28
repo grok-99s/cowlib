@@ -120,7 +120,8 @@
 
 	%% Connection-wide frame processing state.
 	state = settings :: settings | normal
-		| {continuation, request | response | trailers | push_promise, continued_frame()},
+		| {continuation, request | response | trailers | push_promise
+			| linger | linger_push, continued_frame()},
 
 	%% Timer for the connection preface.
 	preface_timer = undefined :: undefined | reference(),
