@@ -1539,13 +1539,12 @@ reset_stream(StreamID, State=#http2_machine{streams=Streams0}) ->
 
 %% A header block for this stream may still be incomplete. Decode and
 %% drop the rest instead of looking the stream up again.
-retarget_continuation(State=#http2_machine{state={continuation, _, Frame}}, StreamID)
-		when element(2, Frame) =:= StreamID ->
-	Type = case Frame of
-		#push_promise{} -> linger_push;
-		_ -> linger
-	end,
-	State#http2_machine{state={continuation, Type, Frame}};
+retarget_continuation(State=#http2_machine{state={continuation, _,
+		Frame=#headers{id=StreamID}}}, StreamID) ->
+	State#http2_machine{state={continuation, linger, Frame}};
+retarget_continuation(State=#http2_machine{state={continuation, _,
+		Frame=#push_promise{id=StreamID}}}, StreamID) ->
+	State#http2_machine{state={continuation, linger_push, Frame}};
 retarget_continuation(State, _) ->
 	State.
 
