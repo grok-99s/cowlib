@@ -556,6 +556,8 @@ server_headers_frame(Frame=#headers{id=StreamID, fin=IsFin, head=IsHeadFin}, Sta
 			{error, {connection_error, protocol_error,
 				'Trailing HEADERS frame received without the END_STREAM flag set. (RFC7540 8.1, RFC7540 8.1.2.6)'},
 				State};
+		undefined ->
+			linger_headers(Frame, State);
 		_ ->
 			{error, {connection_error, stream_closed,
 				'HEADERS frame received on a stream in closed or half-closed state. (RFC7540 5.1)'},
